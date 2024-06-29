@@ -22,8 +22,8 @@ export const CreateProductForm = () => {
   }, []);
 
   const [userAcceptedFiles, setUserAcceptedFiles] = useState<File[]>([]);
-  const onDrop = useCallback((acceptedFiles) => {
-    setUserAcceptedFiles((_) => [..._, ...(acceptedFiles as File[])]);
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setUserAcceptedFiles((_) => [..._, ...acceptedFiles]);
   }, []);
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
