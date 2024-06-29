@@ -1,19 +1,28 @@
 "use client";
 import { ProductType, productSchema } from "@/validations/products";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export const CreateProductForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
+    reset,
   } = useForm<ProductType>({
     mode: "all",
     resolver: zodResolver(productSchema),
   });
 
-  const onSubmit: SubmitHandler<ProductType> = (data) => console.log(data);
+  useEffect(() => {
+    reset({ name: "samsung", stock: 1, price: 45.69 });
+  }, []);
+
+  const onSubmit: SubmitHandler<ProductType> = (data) => {
+    const product = { ...data, price: +data.price };
+    console.log(product);
+  };
 
   return (
     <div>
@@ -24,6 +33,10 @@ export const CreateProductForm = () => {
         {errors.name && <div>{errors.name.message}</div>}
 
         <input {...register("price")} />
+        {errors.price && <div>{errors.price.message as string}</div>}
+
+        <input type="number" {...register("stock")} />
+        {errors.stock && <div>{errors.stock.message}</div>}
 
         <input type="submit" />
       </form>
