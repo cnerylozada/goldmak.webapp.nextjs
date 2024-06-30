@@ -1,7 +1,13 @@
 "use client";
 import { IResourceFileToUpload } from "@/models/models";
-import { uploadOrganizationResourceFile } from "@/server-actions/manageFiles";
-import { converFileToBase64 } from "@/utils/utils";
+import {
+  uploadListOfOrganizationResourceFiles,
+  uploadOrganizationResourceFile,
+} from "@/server-actions/manageFiles";
+import {
+  converFileToBase64,
+  mapAcceptedFilesToResourcesToUpload,
+} from "@/utils/utils";
 import { ProductType, productSchema } from "@/validations/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -34,8 +40,8 @@ export const CreateProductForm = () => {
       accept: {
         "image/png": [".png", ".jpg", ".jpeg"],
       },
-      maxFiles: 5,
-      maxSize: 800000,
+      maxFiles: 3,
+      maxSize: 250000,
     });
   const fileRejectionItems = fileRejections.map(({ file, errors }, index) => {
     return (
@@ -52,16 +58,16 @@ export const CreateProductForm = () => {
 
   const onSubmit: SubmitHandler<ProductType> = async (data) => {
     const product = { ...data, price: +data.price };
-    const mockImageFile = userAcceptedFiles[0];
 
-    const fileContentInBase64 = await converFileToBase64(mockImageFile);
+    const fileItems = await mapAcceptedFilesToResourcesToUpload(
+      userAcceptedFiles
+    );
     const resourceFile: IResourceFileToUpload = {
       organizationId: "1",
-      fileContentInBase64: fileContentInBase64 as string,
       resourceType: "product",
-      fileNameWithExtension: "Cristian Lozada.png",
+      fileItems,
     };
-    const response = await uploadOrganizationResourceFile(resourceFile);
+    const response = await uploadListOfOrganizationResourceFiles(resourceFile);
     console.log(response);
   };
 

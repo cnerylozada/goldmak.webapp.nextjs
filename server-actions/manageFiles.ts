@@ -1,15 +1,15 @@
 "use server";
 
-import { IResourceFileToUpload } from "@/models/models";
+import { IResourceFileToUpload, SingleResourceFileType } from "@/models/models";
 
 export const uploadOrganizationResourceFile = async (
-  resourceFile: IResourceFileToUpload
-) => {
+  resourceFile: SingleResourceFileType
+): Promise<{ response: { objectURL: string } }> => {
   const requestBody = {
     organizationId: resourceFile.organizationId,
     resourceType: resourceFile.resourceType,
-    fileNameWithExtension: resourceFile.fileNameWithExtension,
-    fileContentInBase64: resourceFile.fileContentInBase64,
+    fileNameWithExtension: resourceFile.fileItem.fileNameWithExtension,
+    fileContentInBase64: resourceFile.fileItem.fileContentInBase64,
   };
   const query = await fetch(
     `${process.env.GOLDMAK_CLOUD_AWS_ENDPOINT}/resources/upload-file`,
@@ -25,4 +25,23 @@ export const uploadOrganizationResourceFile = async (
   );
   const response = await query.json();
   return response;
+};
+
+export const uploadListOfOrganizationResourceFiles = async (
+  resourceFiles: IResourceFileToUpload
+) => {
+  const { fileItems, organizationId, resourceType } = resourceFiles;
+
+  return Promise.all(
+    fileItems.map(async (fileItem) => {
+      const resourceFile: SingleResourceFileType = {
+        organizationId,
+        resourceType,
+        fileItem,
+      };
+      return uploadOrganizationResourceFile(resourceFile).then(
+        (response) => response
+      );
+    })
+  );
 };
