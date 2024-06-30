@@ -1,13 +1,7 @@
 "use client";
 import { IResourceFileToUpload } from "@/models/models";
-import {
-  uploadListOfOrganizationResourceFiles,
-  uploadOrganizationResourceFile,
-} from "@/server-actions/manageFiles";
-import {
-  converFileToBase64,
-  mapAcceptedFilesToResourcesToUpload,
-} from "@/utils/utils";
+import { uploadListOfOrganizationResourceFiles } from "@/server-actions/manageFiles";
+import { mapAcceptedFilesToResourcesToUpload } from "@/utils/utils";
 import { ProductType, productSchema } from "@/validations/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
