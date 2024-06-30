@@ -1,4 +1,7 @@
 "use client";
+import { IResourceFileToUpload } from "@/models/models";
+import { uploadOrganizationResourceFile } from "@/server-actions/manageFiles";
+import { converFileToBase64 } from "@/utils/utils";
 import { ProductType, productSchema } from "@/validations/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -47,9 +50,19 @@ export const CreateProductForm = () => {
     );
   });
 
-  const onSubmit: SubmitHandler<ProductType> = (data) => {
+  const onSubmit: SubmitHandler<ProductType> = async (data) => {
     const product = { ...data, price: +data.price };
-    console.log(product);
+    const mockImageFile = userAcceptedFiles[0];
+
+    const fileContentInBase64 = await converFileToBase64(mockImageFile);
+    const resourceFile: IResourceFileToUpload = {
+      organizationId: "1",
+      fileContentInBase64: fileContentInBase64 as string,
+      resourceType: "product",
+      fileNameWithExtension: "Cristian Lozada.png",
+    };
+    const response = await uploadOrganizationResourceFile(resourceFile);
+    console.log(response);
   };
 
   return (
