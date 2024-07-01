@@ -64,8 +64,6 @@ export const CreateOrganizationForm = () => {
     //   fileItems,
     // };
     // const response = await uploadListOfOrganizationResourceFiles(resourceFile);
-    const host = `${window.location.protocol}//${window.location.host}`;
-    console.log("host", host);
     try {
       // const response = await createOrganization(
       //   {
@@ -79,13 +77,13 @@ export const CreateOrganizationForm = () => {
         `/api/creators/cly291hd40000pz2kxwmphgcl/organizations`,
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             name: data.name,
             description: data.description,
           }),
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
       const response = await query.json();
