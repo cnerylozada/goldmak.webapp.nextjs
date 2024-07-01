@@ -1,13 +1,7 @@
 import { CreateOrganizationForm } from "@/modules/organization/CreateOrganizationForm";
-import prisma from "@/prisma/client";
 import Image from "next/image";
 
 export default async function Home() {
-  const newUser = await prisma.user.create({
-    data: {
-      username: "lucciano",
-    },
-  });
   return (
     <main className="">
       <a
