@@ -64,12 +64,19 @@ export const CreateOrganizationForm = () => {
     //   fileItems,
     // };
     // const response = await uploadListOfOrganizationResourceFiles(resourceFile);
-    const response = await createOrganization({
-      creatorId: "cly291hd40000pz2kxwmphgcl",
-      name: data.name,
-      description: data.description,
-    });
-    console.log(response);
+    try {
+      const response = await createOrganization(
+        {
+          creatorId: "cly291hd40000pz2kxwmphgcl",
+          name: data.name,
+          description: data.description,
+        },
+        `${window.location.protocol}//${window.location.host}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (

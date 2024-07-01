@@ -9,6 +9,11 @@ export async function POST(
   const body: Omit<IBaseOrganization, "creatorId"> = await request.json();
   const creatorId = params.creatorId;
 
+  const creator = await prisma.user.findUnique({ where: { id: creatorId } });
+  if (!creator) {
+    return NextResponse.json({ error: "Creator not found" }, { status: 404 });
+  }
+
   const newOrganization = await prisma.organization.create({
     data: {
       user: {
