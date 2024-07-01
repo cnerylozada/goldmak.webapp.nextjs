@@ -4,7 +4,14 @@ export const converFileToBase64 = (file: File) =>
   new Promise((resolve) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
+    reader.onload = function () {
+      const rawEncode = reader.result;
+      const metaIndex = (rawEncode as string).indexOf(",");
+      resolve((rawEncode as string).slice(metaIndex + 1));
+    };
+    reader.onerror = function (error) {
+      console.log("Error: ", error);
+    };
   });
 
 export const mapAcceptedFilesToResourcesToUpload = (files: File[]) => {

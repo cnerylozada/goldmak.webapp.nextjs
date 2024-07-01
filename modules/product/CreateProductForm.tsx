@@ -56,6 +56,7 @@ export const CreateProductForm = () => {
     const fileItems = await mapAcceptedFilesToResourcesToUpload(
       userAcceptedFiles
     );
+    console.log("fileItems", fileItems);
     const resourceFile: IResourceFileToUpload = {
       organizationId: "1",
       resourceType: "product",

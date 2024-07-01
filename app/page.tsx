@@ -51,8 +51,7 @@ export default async function Home() {
         </a>
       </div>
       <div>
-        {" "}
-        <CreateOrganizationForm />{" "}
+        <CreateOrganizationForm />
       </div>
     </main>
   );
