@@ -15,7 +15,7 @@ import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export const CreateOrganizationForm = () => {
-  const creatorId = "...cly291hd40000pz2kxwmphgcl";
+  const creatorId = "cly291hd40000pz2kxwmphgcl";
   const [submissionError, setSubmissionError] = useState({ message: "" });
 
   const {
@@ -61,41 +61,41 @@ export const CreateOrganizationForm = () => {
   const onSubmit: SubmitHandler<OrganizationSchemaType> = async (data) => {
     setSubmissionError({ message: "" });
 
-    try {
-      const fetchCreateOrganization = await fetch(
-        `/api/creators/${creatorId}/organizations`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: data.name,
-            description: data.description,
-          }),
-        }
-      );
-      const newOrganization: Organization =
-        await fetchCreateOrganization.json();
-
-      const fileItems = await mapAcceptedFilesToResourcesToUpload(
-        userAcceptedFiles
-      );
-      const resourceFile: IResourceFileToUpload = {
-        organizationId: newOrganization.id,
-        resourceType: "organization",
-        fileItems,
-      };
-      const resourcesUploadedList = await uploadListOfOrganizationResourceFiles(
-        resourceFile
-      );
-      await attachResourceFilesToOrganization(
-        newOrganization.id,
-        resourcesUploadedList
-      );
-    } catch (error) {
-      setSubmissionError({ message: JSON.stringify(error) });
+    const fetchCreateOrganization = await fetch(
+      `/api/creators/${creatorId}/organizations`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          description: data.description,
+        }),
+      }
+    );
+    const queryResponse = await fetchCreateOrganization.json();
+    if (queryResponse.error) {
+      setSubmissionError({ message: queryResponse.error });
+      return;
     }
+
+    const newOrganization: Organization = queryResponse;
+    const fileItems = await mapAcceptedFilesToResourcesToUpload(
+      userAcceptedFiles
+    );
+    const resourceFile: IResourceFileToUpload = {
+      organizationId: newOrganization.id,
+      resourceType: "organization",
+      fileItems,
+    };
+    const resourcesUploadedList = await uploadListOfOrganizationResourceFiles(
+      resourceFile
+    );
+    await attachResourceFilesToOrganization(
+      newOrganization.id,
+      resourcesUploadedList
+    );
   };
 
   return (

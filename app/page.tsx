@@ -52,8 +52,8 @@ export default async function Home() {
         </a>
       </div>
       <div>
-        <CreateOrganizationForm />
-        {/* <CreateProductForm /> */}
+        {/* <CreateOrganizationForm /> */}
+        <CreateProductForm />
       </div>
     </main>
   );

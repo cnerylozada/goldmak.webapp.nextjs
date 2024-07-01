@@ -1,17 +1,21 @@
 "use client";
 import { IResourceFileToUpload } from "@/models/models";
 import { uploadListOfOrganizationResourceFiles } from "@/server-actions/manageFiles";
-import { createProductInOrganization } from "@/server-actions/products";
+import {
+  attachResourceFilesToProduct,
+  createProductInOrganization,
+} from "@/server-actions/products";
 import { mapAcceptedFilesToResourcesToUpload } from "@/utils/utils";
 import { ProductSchemaType, productSchema } from "@/validations/products";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Product } from "@prisma/client";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export const CreateProductForm = () => {
-  const organizationId = "cly3f7aqy00009c692aq6dd19";
+  const organizationId = "cly3f8gqf00039c6993j66xlf";
   const [submissionError, setSubmissionError] = useState({ message: "" });
 
   const {
@@ -64,25 +68,27 @@ export const CreateProductForm = () => {
     setSubmissionError({ message: "" });
 
     const basicProductToAdd = { ...data, price: +data.price };
-    const query = await createProductInOrganization(
+    const queryResponse = await createProductInOrganization(
       organizationId,
       basicProductToAdd
     );
-    if (!!query.error) {
-      setSubmissionError({ message: query.error });
+    if (!!queryResponse.error) {
+      setSubmissionError({ message: queryResponse.error });
     }
 
-    // const fileItems = await mapAcceptedFilesToResourcesToUpload(
-    //   userAcceptedFiles
-    // );
-    // const resourceFile: IResourceFileToUpload = {
-    //   organizationId: organizationId,
-    //   resourceType: "product",
-    //   fileItems,
-    // };
-    // const resourcesUploadedList = await uploadListOfOrganizationResourceFiles(
-    //   resourceFile
-    // );
+    const newProduct = queryResponse.response as Product;
+    const fileItems = await mapAcceptedFilesToResourcesToUpload(
+      userAcceptedFiles
+    );
+    const resourceFile: IResourceFileToUpload = {
+      organizationId: organizationId,
+      resourceType: "product",
+      fileItems,
+    };
+    const resourcesUploadedList = await uploadListOfOrganizationResourceFiles(
+      resourceFile
+    );
+    await attachResourceFilesToProduct(newProduct.id, resourcesUploadedList);
   };
 
   return (
