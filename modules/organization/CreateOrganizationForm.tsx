@@ -13,6 +13,7 @@ import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export const CreateOrganizationForm = () => {
+  const creatorId = "cly291hd40000pz2kxwmphgcl";
   const {
     register,
     handleSubmit,
@@ -54,26 +55,9 @@ export const CreateOrganizationForm = () => {
   });
 
   const onSubmit: SubmitHandler<OrganizationType> = async (data) => {
-    // const fileItems = await mapAcceptedFilesToResourcesToUpload(
-    //   userAcceptedFiles
-    // );
-    // const resourceFile: IResourceFileToUpload = {
-    //   organizationId: "1",
-    //   resourceType: "organization",
-    //   fileItems,
-    // };
-    // const response = await uploadListOfOrganizationResourceFiles(resourceFile);
     try {
-      // const response = await createOrganization(
-      //   {
-      //     creatorId: "cly291hd40000pz2kxwmphgcl",
-      //     name: data.name,
-      //     description: data.description,
-      //   },
-      //   host
-      // );
-      const query = await fetch(
-        `/api/creators/cly291hd40000pz2kxwmphgcl/organizations`,
+      const fetchCreateOrganization = await fetch(
+        `/api/creators/${creatorId}/organizations`,
         {
           method: "POST",
           headers: {
@@ -85,8 +69,21 @@ export const CreateOrganizationForm = () => {
           }),
         }
       );
-      const response = await query.json();
-      console.log(response);
+      const newOrganization = await fetchCreateOrganization.json();
+      console.log("newOrganization", newOrganization);
+
+      const fileItems = await mapAcceptedFilesToResourcesToUpload(
+        userAcceptedFiles
+      );
+      const resourceFile: IResourceFileToUpload = {
+        organizationId: newOrganization.id,
+        resourceType: "organization",
+        fileItems,
+      };
+      const resourcesUploadedList = await uploadListOfOrganizationResourceFiles(
+        resourceFile
+      );
+      console.log("resourcesUploadedList", resourcesUploadedList);
     } catch (error) {
       console.log("error", error);
     }
@@ -140,8 +137,7 @@ export const CreateOrganizationForm = () => {
 
         <button
           type="submit"
-          //   disabled={!isValid || !userAcceptedFiles.length}
-          disabled={!isValid}
+          disabled={!isValid || !userAcceptedFiles.length}
           className="bg-green-400 disabled:bg-gray-300"
         >
           Submit

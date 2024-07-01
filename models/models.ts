@@ -1,9 +1,3 @@
-export interface IBaseOrganizationCreationDto {
-  name: string;
-  description: string;
-  creatorId: string;
-}
-
 export type resourceType = "organization" | "product";
 
 export interface IFileItem {

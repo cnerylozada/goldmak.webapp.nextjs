@@ -1,4 +1,3 @@
-import { IBaseOrganizationCreationDto } from "@/models/models";
 import prisma from "@/prisma/client";
 import { organizationSchema } from "@/validations/organizations";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,8 +6,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { creatorId: string } }
 ) {
-  const body: Omit<IBaseOrganizationCreationDto, "creatorId"> =
-    await request.json();
+  const body = await request.json();
   const validation = organizationSchema.safeParse(body);
 
   if (!validation.success)
