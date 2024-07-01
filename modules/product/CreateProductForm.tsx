@@ -68,8 +68,6 @@ export const CreateProductForm = () => {
 
   return (
     <div>
-      <div>CreateProductForm</div>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} />
         {errors.name && <div>{errors.name.message}</div>}

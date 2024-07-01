@@ -71,7 +71,6 @@ export const CreateOrganizationForm = () => {
         }
       );
       const newOrganization = await fetchCreateOrganization.json();
-      console.log("newOrganization", newOrganization);
 
       const fileItems = await mapAcceptedFilesToResourcesToUpload(
         userAcceptedFiles
@@ -84,7 +83,6 @@ export const CreateOrganizationForm = () => {
       const resourcesUploadedList = await uploadListOfOrganizationResourceFiles(
         resourceFile
       );
-      console.log("resourcesUploadedList", resourcesUploadedList);
       await attachResourceFilesToOrganization(
         newOrganization.id,
         resourcesUploadedList
@@ -96,8 +94,6 @@ export const CreateOrganizationForm = () => {
 
   return (
     <div>
-      <div>CreateProductForm</div>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} />
 
