@@ -8,4 +8,4 @@ export const organizationSchema = z.object({
   description: z.string().min(1, "Description is required"),
 });
 
-export type OrganizationType = z.infer<typeof organizationSchema>;
+export type OrganizationSchemaType = z.infer<typeof organizationSchema>;

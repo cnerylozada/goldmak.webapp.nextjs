@@ -1,4 +1,5 @@
 import { CreateOrganizationForm } from "@/modules/organization/CreateOrganizationForm";
+import { CreateProductForm } from "@/modules/product/CreateProductForm";
 import Image from "next/image";
 
 export default async function Home() {
@@ -52,6 +53,7 @@ export default async function Home() {
       </div>
       <div>
         <CreateOrganizationForm />
+        {/* <CreateProductForm /> */}
       </div>
     </main>
   );

@@ -23,4 +23,4 @@ export const productSchema = z.object({
     .gte(1, "At least 1"),
 });
 
-export type ProductType = z.infer<typeof productSchema>;
+export type ProductSchemaType = z.infer<typeof productSchema>;

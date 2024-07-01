@@ -4,23 +4,26 @@ import { uploadListOfOrganizationResourceFiles } from "@/server-actions/manageFi
 import { attachResourceFilesToOrganization } from "@/server-actions/organizations";
 import { mapAcceptedFilesToResourcesToUpload } from "@/utils/utils";
 import {
-  OrganizationType,
+  OrganizationSchemaType,
   organizationSchema,
 } from "@/validations/organizations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Organization } from "@prisma/client";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export const CreateOrganizationForm = () => {
-  const creatorId = "cly291hd40000pz2kxwmphgcl";
+  const creatorId = "...cly291hd40000pz2kxwmphgcl";
+  const [submissionError, setSubmissionError] = useState({ message: "" });
+
   const {
     register,
     handleSubmit,
     formState: { isValid },
     reset,
-  } = useForm<OrganizationType>({
+  } = useForm<OrganizationSchemaType>({
     mode: "all",
     resolver: zodResolver(organizationSchema),
   });
@@ -55,7 +58,9 @@ export const CreateOrganizationForm = () => {
     );
   });
 
-  const onSubmit: SubmitHandler<OrganizationType> = async (data) => {
+  const onSubmit: SubmitHandler<OrganizationSchemaType> = async (data) => {
+    setSubmissionError({ message: "" });
+
     try {
       const fetchCreateOrganization = await fetch(
         `/api/creators/${creatorId}/organizations`,
@@ -70,7 +75,8 @@ export const CreateOrganizationForm = () => {
           }),
         }
       );
-      const newOrganization = await fetchCreateOrganization.json();
+      const newOrganization: Organization =
+        await fetchCreateOrganization.json();
 
       const fileItems = await mapAcceptedFilesToResourcesToUpload(
         userAcceptedFiles
@@ -88,12 +94,19 @@ export const CreateOrganizationForm = () => {
         resourcesUploadedList
       );
     } catch (error) {
-      console.log("error", error);
+      setSubmissionError({ message: JSON.stringify(error) });
     }
   };
 
   return (
     <div>
+      <div>Organization Form</div>
+      {submissionError.message && (
+        <div className="text-red-600 font-bold uppercase">
+          {submissionError.message}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} />
 

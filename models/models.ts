@@ -20,3 +20,10 @@ export type SingleResourceFileType = Omit<
 export interface IResourceUploadedResponse {
   response: { objectURL: string };
 }
+
+export interface ICreateBasicProductDto {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+}

@@ -1,8 +1,9 @@
 "use client";
 import { IResourceFileToUpload } from "@/models/models";
 import { uploadListOfOrganizationResourceFiles } from "@/server-actions/manageFiles";
+import { createProductInOrganization } from "@/server-actions/products";
 import { mapAcceptedFilesToResourcesToUpload } from "@/utils/utils";
-import { ProductType, productSchema } from "@/validations/products";
+import { ProductSchemaType, productSchema } from "@/validations/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -10,26 +11,33 @@ import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export const CreateProductForm = () => {
-  const orgId = "xxxx";
+  const organizationId = "cly3f7aqy00009c692aq6dd19";
+  const [submissionError, setSubmissionError] = useState({ message: "" });
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     reset,
-  } = useForm<ProductType>({
+  } = useForm<ProductSchemaType>({
     mode: "all",
     resolver: zodResolver(productSchema),
   });
 
   useEffect(() => {
-    reset({ name: "samsung", stock: 1, price: 45.69 });
+    reset({
+      name: "samsung",
+      description: "some description",
+      stock: 1,
+      price: 45.69,
+    });
   }, []);
 
   const [userAcceptedFiles, setUserAcceptedFiles] = useState<File[]>([]);
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setUserAcceptedFiles((_) => [..._, ...acceptedFiles]);
   }, []);
+
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
       onDrop,
@@ -52,27 +60,45 @@ export const CreateProductForm = () => {
     );
   });
 
-  const onSubmit: SubmitHandler<ProductType> = async (data) => {
-    const product = { ...data, price: +data.price };
+  const onSubmit: SubmitHandler<ProductSchemaType> = async (data) => {
+    setSubmissionError({ message: "" });
 
-    const fileItems = await mapAcceptedFilesToResourcesToUpload(
-      userAcceptedFiles
+    const basicProductToAdd = { ...data, price: +data.price };
+    const query = await createProductInOrganization(
+      organizationId,
+      basicProductToAdd
     );
-    console.log("fileItems", fileItems);
-    const resourceFile: IResourceFileToUpload = {
-      organizationId: "1",
-      resourceType: "product",
-      fileItems,
-    };
-    const response = await uploadListOfOrganizationResourceFiles(resourceFile);
-    console.log(response);
+    if (!!query.error) {
+      setSubmissionError({ message: query.error });
+    }
+
+    // const fileItems = await mapAcceptedFilesToResourcesToUpload(
+    //   userAcceptedFiles
+    // );
+    // const resourceFile: IResourceFileToUpload = {
+    //   organizationId: organizationId,
+    //   resourceType: "product",
+    //   fileItems,
+    // };
+    // const resourcesUploadedList = await uploadListOfOrganizationResourceFiles(
+    //   resourceFile
+    // );
   };
 
   return (
     <div>
+      <div>Product Form</div>
+      {submissionError.message && (
+        <div className="text-red-600 font-bold uppercase">
+          {submissionError.message}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register("name")} />
         {errors.name && <div>{errors.name.message}</div>}
+
+        <input {...register("description")} />
 
         <input {...register("price")} />
         {errors.price && <div>{errors.price.message as string}</div>}
