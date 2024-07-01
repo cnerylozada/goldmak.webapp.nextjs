@@ -1,4 +1,4 @@
-export interface IBaseOrganization {
+export interface IBaseOrganizationCreationDto {
   name: string;
   description: string;
   creatorId: string;

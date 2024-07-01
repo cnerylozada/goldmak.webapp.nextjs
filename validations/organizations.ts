@@ -1,8 +1,11 @@
 import { z } from "zod";
 
 export const organizationSchema = z.object({
-  name: z.string(),
-  description: z.string(),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(20, "Name must have 20 chars at most"),
+  description: z.string().min(1, "Description is required"),
 });
 
 export type OrganizationType = z.infer<typeof organizationSchema>;

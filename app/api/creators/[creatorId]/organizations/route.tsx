@@ -1,12 +1,18 @@
-import { IBaseOrganization } from "@/models/models";
+import { IBaseOrganizationCreationDto } from "@/models/models";
 import prisma from "@/prisma/client";
+import { organizationSchema } from "@/validations/organizations";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { creatorId: string } }
 ) {
-  const body: Omit<IBaseOrganization, "creatorId"> = await request.json();
+  const body: Omit<IBaseOrganizationCreationDto, "creatorId"> =
+    await request.json();
+  const validation = organizationSchema.safeParse(body);
+
+  if (!validation.success)
+    return NextResponse.json(validation.error.format(), { status: 400 });
   const creatorId = params.creatorId;
 
   const creator = await prisma.user.findUnique({ where: { id: creatorId } });

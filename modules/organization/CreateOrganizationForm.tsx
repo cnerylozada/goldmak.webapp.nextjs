@@ -1,7 +1,6 @@
 "use client";
 import { IResourceFileToUpload } from "@/models/models";
 import { uploadListOfOrganizationResourceFiles } from "@/server-actions/manageFiles";
-import { createOrganization } from "@/server-actions/organizations";
 import { mapAcceptedFilesToResourcesToUpload } from "@/utils/utils";
 import {
   OrganizationType,
