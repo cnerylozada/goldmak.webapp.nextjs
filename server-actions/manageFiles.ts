@@ -1,10 +1,14 @@
 "use server";
 
-import { IResourceFileToUpload, SingleResourceFileType } from "@/models/models";
+import {
+  IResourceFileToUpload,
+  IResourceUploadedResponse,
+  SingleResourceFileType,
+} from "@/models/models";
 
 export const uploadOrganizationResourceFile = async (
   resourceFile: SingleResourceFileType
-): Promise<{ response: { objectURL: string } }> => {
+): Promise<IResourceUploadedResponse> => {
   const requestBody = {
     organizationId: resourceFile.organizationId,
     resourceType: resourceFile.resourceType,

@@ -3,8 +3,9 @@ import { z } from "zod";
 export const productSchema = z.object({
   name: z
     .string()
-    .min(3, "It must be at least 3 chars")
-    .max(10, "It must be at most 10 chars"),
+    .min(1, "Name is required")
+    .max(20, "Name must have 20 chars at most"),
+  description: z.string().min(1, "Description is required"),
   price: z.custom(
     (_) => {
       return (

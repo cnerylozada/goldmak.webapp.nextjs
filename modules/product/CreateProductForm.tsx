@@ -10,6 +10,8 @@ import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 export const CreateProductForm = () => {
+  const orgId = "xxxx";
+
   const {
     register,
     handleSubmit,

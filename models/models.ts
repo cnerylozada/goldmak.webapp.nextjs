@@ -16,3 +16,7 @@ export type SingleResourceFileType = Omit<
 > & {
   fileItem: IFileItem;
 };
+
+export interface IResourceUploadedResponse {
+  response: { objectURL: string };
+}

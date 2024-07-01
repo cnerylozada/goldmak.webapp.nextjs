@@ -43,6 +43,7 @@ model Product {
   organization   Organization          @relation(fields: [organizationId], references: [id])
   organizationId String
   resourceFiles  ProductResourceFile[]
+  name           String
   stock          Int
   price          Float
   disabled       Boolean               @default(false)

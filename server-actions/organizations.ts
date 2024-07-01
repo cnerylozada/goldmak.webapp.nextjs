@@ -1,10 +1,11 @@
 "use server";
 
+import { IResourceUploadedResponse } from "@/models/models";
 import prisma from "@/prisma/client";
 
 export const attachResourceFilesToOrganization = async (
   organizationId: string,
-  resourcesUploadedList: { response: { objectURL: string } }[]
+  resourcesUploadedList: IResourceUploadedResponse[]
 ) => {
   const bucketKeysList = resourcesUploadedList.map((_) => ({
     bucketKey: _.response.objectURL,
