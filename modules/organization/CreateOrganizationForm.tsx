@@ -64,15 +64,31 @@ export const CreateOrganizationForm = () => {
     //   fileItems,
     // };
     // const response = await uploadListOfOrganizationResourceFiles(resourceFile);
+    const host = `${window.location.protocol}//${window.location.host}`;
+    console.log("host", host);
     try {
-      const response = await createOrganization(
+      // const response = await createOrganization(
+      //   {
+      //     creatorId: "cly291hd40000pz2kxwmphgcl",
+      //     name: data.name,
+      //     description: data.description,
+      //   },
+      //   host
+      // );
+      const query = await fetch(
+        `/api/creators/cly291hd40000pz2kxwmphgcl/organizations`,
         {
-          creatorId: "cly291hd40000pz2kxwmphgcl",
-          name: data.name,
-          description: data.description,
-        },
-        `${window.location.protocol}//${window.location.host}`
+          method: "POST",
+          body: JSON.stringify({
+            name: data.name,
+            description: data.description,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+      const response = await query.json();
       console.log(response);
     } catch (error) {
       console.log("error", error);
