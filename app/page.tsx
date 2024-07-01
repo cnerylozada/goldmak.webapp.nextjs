@@ -1,7 +1,8 @@
-import { CreateProductForm } from "@/modules/product/CreateProductForm";
+import { CreateOrganizationForm } from "@/modules/organization/CreateOrganizationForm";
+import prisma from "@/prisma/client";
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="">
       <a
@@ -51,7 +52,8 @@ export default function Home() {
         </a>
       </div>
       <div>
-        <CreateProductForm />
+        {" "}
+        <CreateOrganizationForm />{" "}
       </div>
     </main>
   );
