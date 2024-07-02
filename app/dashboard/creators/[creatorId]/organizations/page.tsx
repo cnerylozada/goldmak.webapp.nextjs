@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -9,7 +10,15 @@ export default async function MyOrganizationsPage({
 }) {
   const creator = await prisma.user.findUnique({
     where: { id: params.creatorId },
-    include: { organizations: true },
+    include: {
+      organizations: {
+        include: {
+          resourceFiles: {
+            select: { bucketKey: true },
+          },
+        },
+      },
+    },
   });
   if (!creator) return notFound();
 
@@ -26,7 +35,16 @@ export default async function MyOrganizationsPage({
           <div key={_.id}>
             <div>{_.id}</div>
             <div>{_.name}</div>
+            <div>
+              <Image
+                src={`${_.resourceFiles[0].bucketKey}`}
+                width={180}
+                height={37}
+                alt={_.resourceFiles[0].bucketKey}
+              />
+            </div>
             <div>{_.description}</div>
+            <div>{_.createdAt.toString()}</div>
           </div>
         ))}
       </div>
