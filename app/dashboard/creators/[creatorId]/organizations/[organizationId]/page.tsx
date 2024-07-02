@@ -7,26 +7,25 @@ export default async function MyOrganizationDetailPage({
 }: {
   params: { creatorId: string; organizationId: string };
 }) {
-  const rawOrganizationDetail = await prisma.organization.findMany({
+  const areValidCretorAndOrg = await prisma.organization.findMany({
     where: {
       AND: [{ id: params.organizationId }, { userId: params.creatorId }],
     },
   });
 
-  if (!rawOrganizationDetail.length) return notFound();
-  const organization = rawOrganizationDetail[0];
+  if (!areValidCretorAndOrg.length) return notFound();
 
   return (
     <div className="">
       <div>MyOrganizationDetailPage</div>
       <div>
         <button className="bg-yellow-200">
-          <Link href={`./${organization.id}/products/create`}>
+          <Link href={`./${params.organizationId}/products/create`}>
             Add new Product
           </Link>
         </button>
       </div>
-      <div>{JSON.stringify(organization)}</div>
+      <div></div>
     </div>
   );
 }

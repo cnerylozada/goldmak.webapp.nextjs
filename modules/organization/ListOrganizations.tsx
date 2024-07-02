@@ -3,6 +3,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { getOrganizationsByCreator } from "./utils";
+import Link from "next/link";
 
 export const ListOrganizations = ({ creatorId }: { creatorId: string }) => {
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
@@ -24,7 +25,9 @@ export const ListOrganizations = ({ creatorId }: { creatorId: string }) => {
           data.pages.map((orgs) =>
             orgs.map((_) => (
               <div key={_.id}>
-                <div>{_.id}</div>
+                <div>
+                  <Link href={`./organizations/${_.id}`}>{_.id}</Link>
+                </div>
                 <div>{_.name}</div>
                 <div>
                   <Image

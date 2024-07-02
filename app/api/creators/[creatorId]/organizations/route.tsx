@@ -6,10 +6,16 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { creatorId: string } }
 ) {
+  const isValidCreatorId = await prisma.user.findUnique({
+    where: { id: params.creatorId },
+  });
+  if (!isValidCreatorId) {
+    return NextResponse.json({ error: "Creator not found" }, { status: 404 });
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const page = searchParams.get("page") ? +searchParams.get("page")! : 0;
   const PAGE_SIZE = 2;
-
   const offset = (page - 1) * PAGE_SIZE;
   const dataResponse = await prisma.organization.findMany({
     where: {
@@ -41,9 +47,10 @@ export async function POST(
   if (!validation.success)
     return NextResponse.json(validation.error.format(), { status: 400 });
   const creatorId = params.creatorId;
-
-  const creator = await prisma.user.findUnique({ where: { id: creatorId } });
-  if (!creator) {
+  const isValidCreatorId = await prisma.user.findUnique({
+    where: { id: creatorId },
+  });
+  if (!isValidCreatorId) {
     return NextResponse.json({ error: "Creator not found" }, { status: 404 });
   }
 
