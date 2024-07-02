@@ -5,7 +5,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { organizationId: string } }
 ) {
-  const isValidOrganizationId = await prisma.user.findUnique({
+  const isValidOrganizationId = await prisma.organization.findUnique({
     where: { id: params.organizationId },
   });
   if (!isValidOrganizationId) {
@@ -35,6 +35,9 @@ export async function GET(
     },
     skip: offset,
     take: PAGE_SIZE,
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return NextResponse.json(dataResponse, { status: 201 });

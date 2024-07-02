@@ -10,6 +10,7 @@ import { ProductSchemaType, productSchema } from "@/validations/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Product } from "@prisma/client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -20,6 +21,7 @@ export const CreateProductForm = ({
   organizationId: string;
 }) => {
   const [submissionError, setSubmissionError] = useState({ message: "" });
+  const router = useRouter();
 
   const {
     register,
@@ -92,6 +94,7 @@ export const CreateProductForm = ({
       resourceFile
     );
     await attachResourceFilesToProduct(newProduct.id, resourcesUploadedList);
+    router.push(`../../${organizationId}`);
   };
 
   return (

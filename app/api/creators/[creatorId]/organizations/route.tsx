@@ -32,6 +32,9 @@ export async function GET(
     },
     skip: offset,
     take: PAGE_SIZE,
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return NextResponse.json(dataResponse, { status: 201 });
