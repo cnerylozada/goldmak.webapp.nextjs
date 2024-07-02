@@ -1,30 +1,28 @@
 "use client";
 
-import { Organization } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { getOrganizationsByCreator } from "./utils";
 
 export const ListOrganizations = ({ creatorId }: { creatorId: string }) => {
-  const getData = async () => {
-    const response = await fetch(
-      `/api/creators/${creatorId}/organizations?page=1`
-    );
-    const data = await response.json();
-    return data;
-  };
+  const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: [`${creatorId}-organizations`],
+      queryFn: (props) => getOrganizationsByCreator(creatorId, props),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage = lastPage.length ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
+    });
 
-  const { data } = useQuery({
-    queryKey: [`${creatorId}-organizations`],
-    queryFn: getData,
-  });
-
-  console.log(data);
   return (
     <div>
+      <div>{status === "pending" && <div>Loading...</div>}</div>
       <div>
         {!!data &&
-          data.map(
-            (_: Organization & { resourceFiles: { bucketKey: string }[] }) => (
+          data.pages.map((orgs) =>
+            orgs.map((_) => (
               <div key={_.id}>
                 <div>{_.id}</div>
                 <div>{_.name}</div>
@@ -39,8 +37,22 @@ export const ListOrganizations = ({ creatorId }: { creatorId: string }) => {
                 <div>{_.description}</div>
                 <div>{_.createdAt.toString()}</div>
               </div>
-            )
+            ))
           )}
+      </div>
+      <div>
+        <button
+          disabled={!hasNextPage || isFetchingNextPage}
+          onClick={() => {
+            fetchNextPage();
+          }}
+        >
+          {isFetchingNextPage
+            ? "Loading more ..."
+            : hasNextPage
+            ? "Load more"
+            : "Nothing more to"}
+        </button>
       </div>
     </div>
   );
