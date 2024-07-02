@@ -14,8 +14,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-export const CreateOrganizationForm = () => {
-  const creatorId = "cly291hd40000pz2kxwmphgcl";
+export const CreateOrganizationForm = ({
+  creatorId,
+}: {
+  creatorId: string;
+}) => {
   const [submissionError, setSubmissionError] = useState({ message: "" });
 
   const {

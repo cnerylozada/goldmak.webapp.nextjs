@@ -1,8 +1,6 @@
-import { CreateOrganizationForm } from "@/modules/organization/CreateOrganizationForm";
-import { CreateProductForm } from "@/modules/product/CreateProductForm";
 import Image from "next/image";
 
-export default async function Home() {
+export default function Home() {
   return (
     <main className="">
       <a
@@ -50,10 +48,6 @@ export default async function Home() {
             Explore starter templates for Next.js.
           </p>
         </a>
-      </div>
-      <div>
-        {/* <CreateOrganizationForm /> */}
-        <CreateProductForm />
       </div>
     </main>
   );
