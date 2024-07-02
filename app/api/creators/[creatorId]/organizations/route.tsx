@@ -2,6 +2,30 @@ import prisma from "@/prisma/client";
 import { organizationSchema } from "@/validations/organizations";
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { creatorId: string } }
+) {
+  const dataResponse = await prisma.organization.findMany({
+    where: {
+      userId: {
+        equals: params.creatorId,
+      },
+    },
+    include: {
+      resourceFiles: {
+        select: {
+          bucketKey: true,
+        },
+      },
+    },
+    skip: 0,
+    take: 2,
+  });
+
+  return NextResponse.json(dataResponse, { status: 201 });
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { creatorId: string } }
