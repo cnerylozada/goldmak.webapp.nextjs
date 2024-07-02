@@ -8,19 +8,27 @@ export default async function MyOrganizationsPage({
 }: {
   params: { creatorId: string };
 }) {
-  const creator = await prisma.user.findUnique({
+  const isValidUser = await prisma.user.findUnique({
     where: { id: params.creatorId },
+  });
+  if (!isValidUser) return notFound();
+
+  const dataResponse = await prisma.organization.findMany({
+    where: {
+      userId: {
+        equals: params.creatorId,
+      },
+    },
     include: {
-      organizations: {
-        include: {
-          resourceFiles: {
-            select: { bucketKey: true },
-          },
+      resourceFiles: {
+        select: {
+          bucketKey: true,
         },
       },
     },
+    skip: 0,
+    take: 2,
   });
-  if (!creator) return notFound();
 
   return (
     <div className="">
@@ -31,7 +39,7 @@ export default async function MyOrganizationsPage({
         </button>
       </div>
       <div>
-        {creator.organizations.map((_) => (
+        {dataResponse!.map((_) => (
           <div key={_.id}>
             <div>{_.id}</div>
             <div>{_.name}</div>
