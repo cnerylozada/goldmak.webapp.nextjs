@@ -7,19 +7,22 @@ export default async function CreateProductPage({
 }: {
   params: { creatorId: string; organizationId: string };
 }) {
-  const rawOrganizationDetail = await prisma.organization.findMany({
+  const areValidCretorAndOrg = await prisma.organization.findMany({
     where: {
       AND: [{ id: params.organizationId }, { userId: params.creatorId }],
     },
+    select: {
+      id: true,
+    },
   });
 
-  if (!rawOrganizationDetail.length) return notFound();
-  const organization = rawOrganizationDetail[0];
+  if (!areValidCretorAndOrg.length) return notFound();
+  const organizationId = areValidCretorAndOrg[0].id;
 
   return (
     <div className="">
       <div>CreateProductPage</div>
-      <CreateProductForm organizationId={organization.id} />
+      <CreateProductForm organizationId={organizationId} />
     </div>
   );
 }

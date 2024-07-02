@@ -5,6 +5,16 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { organizationId: string } }
 ) {
+  const isValidOrganizationId = await prisma.user.findUnique({
+    where: { id: params.organizationId },
+  });
+  if (!isValidOrganizationId) {
+    return NextResponse.json(
+      { error: "Organization not found" },
+      { status: 404 }
+    );
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const page = searchParams.get("page") ? +searchParams.get("page")! : 0;
   const PAGE_SIZE = 2;

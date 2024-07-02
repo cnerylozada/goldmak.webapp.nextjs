@@ -10,6 +10,7 @@ export default async function MyOrganizationsPage({
 }) {
   const isValidUser = await prisma.user.findUnique({
     where: { id: params.creatorId },
+    select: { id: true },
   });
   if (!isValidUser) return notFound();
 

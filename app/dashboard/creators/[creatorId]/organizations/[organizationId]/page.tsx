@@ -1,3 +1,4 @@
+import { ListProducts } from "@/modules/product/ListProducts";
 import prisma from "@/prisma/client";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,6 +12,7 @@ export default async function MyOrganizationDetailPage({
     where: {
       AND: [{ id: params.organizationId }, { userId: params.creatorId }],
     },
+    select: { id: true },
   });
 
   if (!areValidCretorAndOrg.length) return notFound();
@@ -25,7 +27,9 @@ export default async function MyOrganizationDetailPage({
           </Link>
         </button>
       </div>
-      <div></div>
+      <div>
+        <ListProducts organizationId={params.organizationId} />
+      </div>
     </div>
   );
 }

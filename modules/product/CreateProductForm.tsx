@@ -33,7 +33,7 @@ export const CreateProductForm = ({
 
   useEffect(() => {
     reset({
-      name: "samsung",
+      name: "ENTER PRODUCT HERE",
       description: "some description",
       stock: 1,
       price: 45.69,
