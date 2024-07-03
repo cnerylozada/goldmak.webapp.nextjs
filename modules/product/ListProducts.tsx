@@ -1,9 +1,10 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { getProductsByOrganization } from "./utils";
 import Link from "next/link";
+import { useCustomInfiniteQuery } from "@/utils/hooks";
+import { Product } from "@prisma/client";
 
 export const ListProducts = ({
   organizationId,
@@ -11,15 +12,11 @@ export const ListProducts = ({
   organizationId: string;
 }) => {
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery({
-      queryKey: [`${organizationId}-products`],
-      queryFn: (props) => getProductsByOrganization(organizationId, props),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = lastPage.length ? allPages.length + 1 : undefined;
-        return nextPage;
-      },
-    });
+    useCustomInfiniteQuery(
+      `${organizationId}-products`,
+      getProductsByOrganization,
+      organizationId
+    );
 
   const existElements = data?.pages.map((_) => _.length)[0];
 
@@ -30,24 +27,30 @@ export const ListProducts = ({
       <div>
         {!!data &&
           data.pages.map((orgs) =>
-            orgs.map((_) => (
-              <div key={_.id}>
-                <div>
-                  <Link href={`./organizations/${_.id}`}>{_.id}</Link>
+            orgs.map(
+              (
+                _: Product & {
+                  resourceFiles: { bucketKey: string }[];
+                }
+              ) => (
+                <div key={_.id}>
+                  <div>
+                    <Link href={`./organizations/${_.id}`}>{_.id}</Link>
+                  </div>
+                  <div>{_.name}</div>
+                  <div>
+                    <Image
+                      src={`${_.resourceFiles[0].bucketKey}`}
+                      width={180}
+                      height={37}
+                      alt={_.resourceFiles[0].bucketKey}
+                    />
+                  </div>
+                  <div>{_.description}</div>
+                  <div>{_.createdAt.toString()}</div>
                 </div>
-                <div>{_.name}</div>
-                <div>
-                  <Image
-                    src={`${_.resourceFiles[0].bucketKey}`}
-                    width={180}
-                    height={37}
-                    alt={_.resourceFiles[0].bucketKey}
-                  />
-                </div>
-                <div>{_.description}</div>
-                <div>{_.createdAt.toString()}</div>
-              </div>
-            ))
+              )
+            )
           )}
       </div>
       <div>

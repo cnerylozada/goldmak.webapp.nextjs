@@ -18,7 +18,6 @@ export default async function MyOrganizationDetailPage({
     },
     select: { id: true },
   });
-
   if (!isValidOrg) return notFound();
 
   return (
