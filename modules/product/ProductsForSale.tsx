@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import Link from "next/link";
 
 export const ProductsForSale = async () => {
   const products = await prisma.product.findMany({
@@ -6,9 +7,6 @@ export const ProductsForSale = async () => {
       id: true,
       name: true,
       price: true,
-      organization: {
-        select: { resourceFiles: { select: { bucketKey: true } } },
-      },
       resourceFiles: { select: { bucketKey: true } },
     },
   });
@@ -19,7 +17,9 @@ export const ProductsForSale = async () => {
       <div>
         {products.map((_) => (
           <div key={_.id}>
-            <div>{_.id}</div>
+            <div>
+              <Link href={`./products/${_.id}`}>{_.id}</Link>
+            </div>
             <div>{_.name}</div>
             <div>{_.price}</div>
           </div>
