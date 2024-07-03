@@ -1,3 +1,4 @@
+import { ProductsForSale } from "@/modules/product/ProductsForSale";
 import Image from "next/image";
 
 export default function Home() {
@@ -47,6 +48,7 @@ export default function Home() {
           </p>
         </a>
       </div>
+      <ProductsForSale />
     </main>
   );
 }
