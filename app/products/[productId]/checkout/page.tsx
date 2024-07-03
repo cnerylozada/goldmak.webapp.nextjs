@@ -26,7 +26,11 @@ export default async function CheckoutProduct({
       <div>{session.user?.email}</div>
       <CheckoutForm
         product={isValidProduct}
-        user={{ email: session.user?.email!, id: session.user?.id! }}
+        user={{
+          email: session.user?.email!,
+          id: session.user?.id!,
+          name: session.user?.name!,
+        }}
       />
     </div>
   );

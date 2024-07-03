@@ -1,4 +1,4 @@
-import KoalaWelcomeEmail from "@/emails/WelcomeTemplate";
+import ReceiptEmail from "@/emails/ReceiptEmail";
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,10 +8,13 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
 
   const { data } = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: "goldmakChallenge <onboarding@resend.dev>",
     to: [body.to],
     subject: body.subject,
-    react: KoalaWelcomeEmail({ productDetail: body.productDetail }),
+    react: ReceiptEmail({
+      owner: body.productDetail.owner,
+      productDetail: body.productDetail,
+    }),
   });
 
   return NextResponse.json(data);

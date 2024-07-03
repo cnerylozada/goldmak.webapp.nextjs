@@ -9,10 +9,12 @@ import {
   Preview,
   Section,
   Text,
+  Link,
 } from "@react-email/components";
 import * as React from "react";
 
-interface KoalaWelcomeEmailProps {
+interface ReceiptEmailProps {
+  owner: string;
   productDetail: {
     name: string;
     image: string;
@@ -23,53 +25,53 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-export const KoalaWelcomeEmail = ({
-  productDetail,
-}: KoalaWelcomeEmailProps) => (
+export const ReceiptEmail = ({ owner, productDetail }: ReceiptEmailProps) => (
   <Html>
     <Head />
-    <Preview>
-      The sales intelligence platform that helps you uncover qualified leads.
-    </Preview>
+    <Preview>It is time to enjoy your new product!</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
           src={productDetail.image}
           width="170"
-          height="50"
+          height="170"
           alt="Koala"
           style={logo}
         />
-        <Text style={paragraph}>Hi,</Text>
+        <Text style={paragraph}>Hi, {owner}</Text>
         <Text style={paragraph}>Product: {productDetail.name}</Text>
         <Section style={btnContainer}>
-          <Button style={button} href="https://getkoala.com">
-            Get started
+          <Button style={button} href="https://goldmak.io/">
+            Go to Goldmak
           </Button>
         </Section>
         <Text style={paragraph}>
           Best,
           <br />
-          The Koala team
+          <Link
+            style={anchor}
+            href="https://www.linkedin.com/in/cristian-nery-027b70180/"
+          >
+            Author: Cristian Nery Sr web2 ft web3 developer
+          </Link>
         </Text>
         <Hr style={hr} />
-        <Text style={footer}>
-          470 Noor Ave STE B #1148, South San Francisco, CA 94080
-        </Text>
+        <Text style={footer}>Goldmak challenge</Text>
       </Container>
     </Body>
   </Html>
 );
 
-KoalaWelcomeEmail.PreviewProps = {
+ReceiptEmail.PreviewProps = {
+  owner: "Lucciano",
   productDetail: {
     name: "my product mocked",
     image:
       "https://miro.medium.com/v2/resize:fit:728/1*MVc6Bwoj5LWsZ-5xBnnkEw.png",
   },
-} as KoalaWelcomeEmailProps;
+} as ReceiptEmailProps;
 
-export default KoalaWelcomeEmail;
+export default ReceiptEmail;
 
 const main = {
   backgroundColor: "#ffffff",
@@ -84,6 +86,10 @@ const container = {
 
 const logo = {
   margin: "0 auto",
+};
+
+const anchor = {
+  color: "#556cd6",
 };
 
 const paragraph = {
