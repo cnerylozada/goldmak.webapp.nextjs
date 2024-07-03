@@ -17,9 +17,13 @@ export const ListOrganizations = ({ creatorId }: { creatorId: string }) => {
       },
     });
 
+  const existElements = data?.pages.map((_) => _.length)[0];
+
   return (
     <div>
       <div>{status === "pending" && <div>Loading...</div>}</div>
+      <div>{!existElements && <div>There are no organizations</div>}</div>
+
       <div>
         {!!data &&
           data.pages.map((orgs) =>

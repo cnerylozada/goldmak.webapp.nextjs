@@ -100,6 +100,7 @@ export const CreateProductForm = ({
   return (
     <div>
       <div>Product Form</div>
+
       {submissionError.message && (
         <div className="text-red-600 font-bold uppercase">
           {submissionError.message}

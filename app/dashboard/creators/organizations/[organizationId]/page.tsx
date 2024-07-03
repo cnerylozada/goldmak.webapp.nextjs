@@ -1,21 +1,25 @@
+import { auth } from "@/auth";
 import { ListProducts } from "@/modules/product/ListProducts";
 import prisma from "@/prisma/client";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function MyOrganizationDetailPage({
   params,
 }: {
-  params: { creatorId: string; organizationId: string };
+  params: { organizationId: string };
 }) {
-  const areValidCretorAndOrg = await prisma.organization.findMany({
+  const session = await auth();
+  if (!session) redirect("/login");
+
+  const isValidOrg = await prisma.organization.findUnique({
     where: {
-      AND: [{ id: params.organizationId }, { userId: params.creatorId }],
+      id: params.organizationId,
     },
     select: { id: true },
   });
 
-  if (!areValidCretorAndOrg.length) return notFound();
+  if (!isValidOrg) return notFound();
 
   return (
     <div className="">

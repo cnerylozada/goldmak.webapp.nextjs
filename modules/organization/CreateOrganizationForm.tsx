@@ -10,6 +10,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Organization } from "@prisma/client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -20,6 +21,7 @@ export const CreateOrganizationForm = ({
   creatorId: string;
 }) => {
   const [submissionError, setSubmissionError] = useState({ message: "" });
+  const router = useRouter();
 
   const {
     register,
@@ -99,11 +101,13 @@ export const CreateOrganizationForm = ({
       newOrganization.id,
       resourcesUploadedList
     );
+    router.push(`../organizations`);
   };
 
   return (
     <div>
       <div>Organization Form</div>
+
       {submissionError.message && (
         <div className="text-red-600 font-bold uppercase">
           {submissionError.message}
