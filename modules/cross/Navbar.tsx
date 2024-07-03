@@ -1,16 +1,17 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
-export const Mock = () => {
+export const Navbar = () => {
   return (
     <div>
+      <div>Navbar</div>
       <div>
         <button
           onClick={() => {
-            signIn("google");
+            signOut();
           }}
         >
-          Signin with Google
+          Logout
         </button>
       </div>
     </div>
