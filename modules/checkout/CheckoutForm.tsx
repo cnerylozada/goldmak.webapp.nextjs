@@ -8,7 +8,9 @@ export const CheckoutForm = ({
   product,
   user,
 }: {
-  product: Product;
+  product: Product & {
+    resourceFiles: { bucketKey: string }[];
+  };
   user: { email: string; id: string };
 }) => {
   const {
@@ -20,6 +22,21 @@ export const CheckoutForm = ({
 
   const onSubmit: SubmitHandler<{ productName: string }> = async (data) => {
     console.log("data", user.email);
+
+    await fetch(`/api/send-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: user.email,
+        subject: "Receipt",
+        productDetail: {
+          name: product.name,
+          image: product.resourceFiles[0].bucketKey,
+        },
+      }),
+    });
     router.push("/");
   };
 

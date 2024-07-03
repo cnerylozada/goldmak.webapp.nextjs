@@ -13,9 +13,11 @@ export default async function CheckoutProduct({
 
   const isValidProduct = await prisma.product.findUnique({
     where: { id: params.productId },
+    include: {
+      resourceFiles: { select: { bucketKey: true } },
+    },
   });
   if (!isValidProduct) return notFound();
-  console.log(isValidProduct);
 
   return (
     <div>

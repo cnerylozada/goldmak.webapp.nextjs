@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     from: "Acme <onboarding@resend.dev>",
     to: [body.to],
     subject: body.subject,
-    react: KoalaWelcomeEmail({ userFirstname: "tatiana" }),
+    react: KoalaWelcomeEmail({ productDetail: body.productDetail }),
   });
 
   return NextResponse.json(data);
