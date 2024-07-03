@@ -1,4 +1,4 @@
-import { Mock } from "@/modules/auth/Mock";
+import { SignIn } from "@/modules/auth/SignIn";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT_URL } from "@/routes";
@@ -9,9 +9,10 @@ export default async function LoginPage() {
 
   return (
     <div>
-      <div>Login page</div>
+      <div className="mb-4 text-3xl font-bold">Login page</div>
+
       <div>
-        <Mock />
+        <SignIn />
       </div>
     </div>
   );

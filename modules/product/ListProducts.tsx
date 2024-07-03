@@ -34,9 +34,6 @@ export const ListProducts = ({
                 }
               ) => (
                 <div key={_.id}>
-                  <div>
-                    <Link href={`./organizations/${_.id}`}>{_.id}</Link>
-                  </div>
                   <div>{_.name}</div>
                   <div>
                     <Image

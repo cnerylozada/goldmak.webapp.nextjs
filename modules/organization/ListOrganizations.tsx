@@ -21,7 +21,7 @@ export const ListOrganizations = ({ creatorId }: { creatorId: string }) => {
       <div>{status === "pending" && <div>Loading...</div>}</div>
       <div>{!existElements && <div>There are no organizations</div>}</div>
 
-      <div>
+      <div className="space-y-4">
         {!!data &&
           data.pages.map((orgs) =>
             orgs.map(

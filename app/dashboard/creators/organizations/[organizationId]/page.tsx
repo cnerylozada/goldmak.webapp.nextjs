@@ -22,14 +22,19 @@ export default async function MyOrganizationDetailPage({
 
   return (
     <div className="">
-      <div>MyOrganizationDetailPage</div>
-      <div>
-        <button className="bg-yellow-200">
-          <Link href={`./${params.organizationId}/products/create`}>
+      <div className="mb-4 text-3xl font-bold">MyOrganizationDetailPage</div>
+
+      <div className="mb-4">
+        <Link
+          href={`./${params.organizationId}/products/create`}
+          className="group inline-block rounded bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+        >
+          <span className="block rounded-sm bg-white px-8 py-3 text-sm font-medium group-hover:bg-transparent">
             Add new Product
-          </Link>
-        </button>
+          </span>
+        </Link>
       </div>
+
       <div>
         <ListProducts organizationId={params.organizationId} />
       </div>

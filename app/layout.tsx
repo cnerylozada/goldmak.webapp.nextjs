@@ -19,9 +19,9 @@ export default function RootLayout({
   return (
     <ReactQueryClientProvider>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={`${inter.className}`}>
           <Navbar />
-          <div>{children}</div>
+          <div className="mx-auto w-[600px]">{children}</div>
         </body>
       </html>
     </ReactQueryClientProvider>
