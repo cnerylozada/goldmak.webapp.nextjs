@@ -1,3 +1,4 @@
+import { Mock } from "@/modules/Mock";
 import { ProductsForSale } from "@/modules/product/ProductsForSale";
 import Image from "next/image";
 
@@ -19,6 +20,7 @@ export default function Home() {
           Sign Up
         </button>
       </div> */}
+      <Mock />
       <ProductsForSale />
     </main>
   );
