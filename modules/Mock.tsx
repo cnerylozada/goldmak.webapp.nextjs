@@ -4,7 +4,7 @@ export const Mock = () => {
     <div>
       <button
         onClick={() => {
-          (window as any).fbq.track("RegistroUsuarioPrueba", {
+          (window as any).fbq.track("CompleteRegistration", {
             content_id: "12345",
             content_type: "product",
             value: 29.99,
