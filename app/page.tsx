@@ -1,8 +1,8 @@
-import { Mock } from "@/modules/Mock";
 import { ProductsForSale } from "@/modules/product/ProductsForSale";
 import Image from "next/image";
 
 export default function Home() {
+  const x = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   return (
     <main className="">
       {/* <div className="relative mx-auto w-full max-w-sm border-2 border-border rounded-lg bg-card p-8">
@@ -20,7 +20,7 @@ export default function Home() {
           Sign Up
         </button>
       </div> */}
-      <Mock />
+      <div>{x}</div>
       <ProductsForSale />
     </main>
   );
